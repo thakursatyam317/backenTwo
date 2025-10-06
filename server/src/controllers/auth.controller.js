@@ -72,6 +72,18 @@ export const userLogin = async(req, res, next) => {
 }
 
 
-// export const userLogout = async (req,res, next)=>{
+export const userLogout = async (req,res, next)=>{
 
-// }
+  try {
+    res.cookie('token', '',{
+      httpOnly: true,
+      expires : new Date(0)
+    })
+    res.status(200).json(
+      new ApiResponse(true, "User logout successfully", null)
+    );
+  } catch (error) {
+    throw new ApiError(500, 'Server Error', error)
+  }
+
+}
