@@ -27,3 +27,36 @@ export const getUserProfile = async (req, res, next) => {
     next(new ApiError(500, "Server error getting user profile", false, error.message));
   }
 };
+
+
+export const updateUserProfile = async (req, res, next) => {
+  const {userName, email, phoneNumber, dob, gender} = req.body;
+
+  try{
+    const userId = req.user?._id || req.user?.id;
+    if(!userId){
+      throw new ApiError(400, "User id is required");
+    }
+    const user = await User.findById({userId});
+    if(!user){
+      throw new ApiError(404, "User not found");
+    }
+
+    if(!userName || !email || !phoneNumber){
+      throw new ApiError(400, "userName, email and phoneNumber are required");
+    }
+    const updatedData = await User.findByIdAndUpdate(
+      userId,
+      {userName, email, phoneNumber, dob, gender},
+      {new: true, runValidators: true}
+    ).select("-password");
+    res
+      .status(200)
+      .json(new ApiResponse(200, "User profile updated successfully", updatedData));
+      next();
+
+  }
+  catch(error){
+    next(new ApiError(500, "Server error updating user profile", false, error.message));
+  }
+}
