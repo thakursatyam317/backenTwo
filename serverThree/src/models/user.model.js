@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       enum: ["Male", "Female", "Other"],
-      default: "Male",
+      
     },
     dob: {
       type: String,
@@ -58,4 +58,4 @@ export const addressSchema = new mongoose.Schema({
   },
 });
 
-export { User };
+export default  User ;
