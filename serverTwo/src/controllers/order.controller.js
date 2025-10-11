@@ -1,6 +1,7 @@
 import Order from "../models/order.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
+import mongoose from "mongoose";
 
 export const createOrder = async (req, res) => {
   try {
@@ -36,7 +37,16 @@ export const createOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
+    const user = req.user.id;
+    // const userIdMongo = await User.findMany({user});
+
     const orders = await Order.aggregate([
+      {
+        $match: {
+          userId: new mongoose.Types.ObjectId(user),// it is not use then of admin like 
+        },
+      },
+
       {
         $lookup: {
           from: "users", // MongoDB collection name (must match your User model’s collection)
@@ -58,6 +68,7 @@ export const getOrders = async (req, res) => {
           price: 1,
           createdAt: 1,
           updatedAt: 1,
+          userId: 1,
           "userDetails._id": 1,
           "userDetails.userName": 1,
           "userDetails.email": 1,
