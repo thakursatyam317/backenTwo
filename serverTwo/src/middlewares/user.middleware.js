@@ -20,17 +20,18 @@ export const userProtection = async (req, res, next) => {
     }
 
     const decode = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decode);// token decode and give the user_id and iat and exp
+    console.log("Decode the token : ",decode);// token decode and give the user_id and iat and exp
     if (!decode) {
       throw new ApiError(401, "not authorized, token failed");
     }
-    const user = await User.findById(decode.user_id);
-    console.log(user);//complete the user details from the user_id
+    const user = await User.findById(decode.id);
+    console.log("user for middleware : ",user);//complete the user details from the user_id
     if (!user) {
       throw new ApiError(404, "not authorized, user not found");
     }
 
     req.user = user;
+
     next();
   } catch (error) {
     throw new ApiError(

@@ -4,6 +4,7 @@ import authRoutes from './src/routes/auth.routes.js';
 import connectDB from './src/configs/db.config.js';
 import cookieParser from 'cookie-parser';
 import userRoutes from './src/routes/user.routes.js';
+import orderRoute from './src/routes/order.route.js'
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/order',orderRoute);
 
 app.get('/', (req, res)=>{
     res.send('Api is running');

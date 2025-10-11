@@ -42,6 +42,7 @@ const userRegister = async (req, res, next)=>{
             gender
 
         })
+        
         if(!newUser){
             throw new ApiError(500, 'Unable to create user');
         }
@@ -53,7 +54,7 @@ const userRegister = async (req, res, next)=>{
         
     } catch (error) {
         throw new ApiError(500, 'Server error', false, error.message);
-       
+       next(error);
         
     }
 }
